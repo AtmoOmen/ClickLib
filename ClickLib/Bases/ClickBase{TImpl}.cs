@@ -1,5 +1,4 @@
 ﻿using System;
-
 using ClickLib.Exceptions;
 using ClickLib.Structures;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -7,18 +6,17 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 namespace ClickLib.Bases;
 
 /// <summary>
-/// Click base class.
+///     Click base class.
 /// </summary>
 /// <typeparam name="TImpl">The implementing type.</typeparam>
-public abstract unsafe class ClickBase<TImpl> : IClickable
-    where TImpl : class
+public abstract unsafe class ClickBase<TImpl> : IClickable where TImpl : class
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ClickBase{TImpl}"/> class.
+    ///     Initializes a new instance of the <see cref="ClickBase{TImpl}" /> class.
     /// </summary>
     /// <param name="name">Addon name.</param>
     /// <param name="addon">Addon address.</param>
-    public ClickBase(string name, IntPtr addon)
+    protected ClickBase(string name, IntPtr addon)
     {
         this.AddonName = name;
 
@@ -30,24 +28,24 @@ public abstract unsafe class ClickBase<TImpl> : IClickable
     }
 
     /// <summary>
-    /// Gets the associated addon name.
+    ///     Gets the associated addon name.
     /// </summary>
     protected string AddonName { get; init; }
 
     /// <summary>
-    /// Gets a pointer to the addon.
+    ///     Gets a pointer to the addon.
     /// </summary>
     protected IntPtr AddonAddress { get; init; }
 
     /// <summary>
-    /// Gets a pointer to the underlying AtkUnitBase.
+    ///     Gets a pointer to the underlying AtkUnitBase.
     /// </summary>
     protected AtkUnitBase* UnitBase { get; }
 
     public static implicit operator TImpl(ClickBase<TImpl> cb) => (cb as TImpl)!;
 
     /// <summary>
-    /// Fire an addon callback.
+    ///     Fire an addon callback.
     /// </summary>
     /// <param name="values">AtkValue values.</param>
     /// <returns>Itself.</returns>
@@ -61,19 +59,19 @@ public abstract unsafe class ClickBase<TImpl> : IClickable
     }
 
     /// <summary>
-    /// Fire an addon callback.
+    ///     Fire an addon callback.
     /// </summary>
     /// <param name="a4">A parameter.</param>
     /// <returns>Itself.</returns>
-    protected TImpl FireNullCallback(ulong a4)
+    protected TImpl FireNullCallback(bool a4)
     {
-        this.UnitBase->FireCallback(0, null, a4 != 0);
+        this.UnitBase->FireCallback(0, null, a4);
 
         return this;
     }
 
     /// <summary>
-    /// Hide the addon.
+    ///     Hide the addon.
     /// </summary>
     /// <returns>Itself.</returns>
     protected TImpl HideAddon()

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-
 using ClickLib.Enums;
 using ClickLib.Structures;
 using FFXIVClientStructs.FFXIV.Client.UI;
@@ -9,7 +8,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 namespace ClickLib.Bases;
 
 /// <summary>
-/// AtkUnitBase receive event delegate.
+///     AtkUnitBase receive event delegate.
 /// </summary>
 /// <param name="eventListener">Type receiving the event.</param>
 /// <param name="evt">Event type.</param>
@@ -20,31 +19,26 @@ namespace ClickLib.Bases;
 internal unsafe delegate IntPtr ReceiveEventDelegate(AtkEventListener* eventListener, EventType evt, uint which, void* eventData, void* inputData);
 
 /// <summary>
-/// Click base class.
+///     Click base class.
 /// </summary>
 /// <typeparam name="TImpl">The implementing type.</typeparam>
 /// <typeparam name="TStruct">FFXIVClientStructs addon type.</typeparam>
-public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl>
+/// <remarks>
+///     Initializes a new instance of the <see cref="ClickBase{TImpl,TStruct}" /> class.
+/// </remarks>
+/// <param name="name">Addon name.</param>
+/// <param name="addon">Addon address.</param>
+public abstract unsafe class ClickBase<TImpl, TStruct>(string name, IntPtr addon) : ClickBase<TImpl>(name, addon)
     where TImpl : class
     where TStruct : unmanaged
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ClickBase{TImpl,TStruct}"/> class.
-    /// </summary>
-    /// <param name="name">Addon name.</param>
-    /// <param name="addon">Addon address.</param>
-    public ClickBase(string name, IntPtr addon)
-        : base(name, addon)
-    {
-    }
-
-    /// <summary>
-    /// Gets a pointer to the type.
+    ///     Gets a pointer to the type.
     /// </summary>
     protected TStruct* Addon => (TStruct*)this.UnitBase;
 
     /// <summary>
-    /// Send a click.
+    ///     Send a click.
     /// </summary>
     /// <param name="target">Target node.</param>
     /// <param name="which">Internal game click routing.</param>
@@ -53,7 +47,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
         => this.ClickAddonComponent(target->AtkComponentBase.OwnerNode, which, type);
 
     /// <summary>
-    /// Send a click.
+    ///     Send a click.
     /// </summary>
     /// <param name="nodeIndex">Target node index.</param>
     /// <param name="which">Internal game click routing.</param>
@@ -65,7 +59,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
     }
 
     /// <summary>
-    /// Send a click.
+    ///     Send a click.
     /// </summary>
     /// <param name="target">Target node.</param>
     /// <param name="which">Internal game click routing.</param>
@@ -74,7 +68,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
         => this.ClickAddonComponent(target->OwnerNode, which, type);
 
     /// <summary>
-    /// Send a click.
+    ///     Send a click.
     /// </summary>
     /// <param name="target">Target node.</param>
     /// <param name="which">Internal game click routing.</param>
@@ -83,7 +77,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
         => this.ClickAddonComponent(target->AtkComponentButton.AtkComponentBase.OwnerNode, which, type);
 
     /// <summary>
-    /// Send a click.
+    ///     Send a click.
     /// </summary>
     /// <param name="target">Target node.</param>
     /// <param name="which">Internal game click routing.</param>
@@ -92,7 +86,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
         => this.ClickAddonComponent(target->AtkComponentBase.OwnerNode, which, type);
 
     /// <summary>
-    /// Send a click.
+    ///     Send a click.
     /// </summary>
     /// <param name="which">Internal game click routing.</param>
     /// <param name="type">Event type.</param>
@@ -107,7 +101,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
     }
 
     /// <summary>
-    /// Send a click.
+    ///     Send a click.
     /// </summary>
     /// <param name="target">Target node.</param>
     /// <param name="which">Internal game click routing.</param>
@@ -123,7 +117,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
     }
 
     /// <summary>
-    /// Send a click.
+    ///     Send a click.
     /// </summary>
     /// <param name="popupMenu">PopupMenu event listener.</param>
     /// <param name="index">List index.</param>
@@ -131,7 +125,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
     protected void ClickAddonList(PopupMenu* popupMenu, ushort index, EventType type = EventType.LIST_INDEX_CHANGE)
     {
         var targetList = popupMenu->List;
-        if (index < 0 || index >= popupMenu->EntryCount)
+        if (index >= popupMenu->EntryCount)
             throw new ArgumentOutOfRangeException(nameof(index), "List index is out of range");
 
         var eventData = EventData.ForNormalTarget(targetList->AtkComponentBase.OwnerNode, popupMenu);
@@ -141,14 +135,14 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
     }
 
     /// <summary>
-    /// Invoke the receive event delegate.
+    ///     Invoke the receive event delegate.
     /// </summary>
     /// <param name="eventListener">Type receiving the event.</param>
     /// <param name="type">Event type.</param>
     /// <param name="which">Internal routing number.</param>
     /// <param name="eventData">Event data.</param>
     /// <param name="inputData">Keyboard and mouse data.</param>
-    private void InvokeReceiveEvent(AtkEventListener* eventListener, EventType type, uint which, EventData eventData, InputData inputData)
+    protected void InvokeReceiveEvent(AtkEventListener* eventListener, EventType type, uint which, EventData eventData, InputData inputData)
     {
         var receiveEvent = this.GetReceiveEvent(eventListener);
         receiveEvent(eventListener, type, which, eventData.Data, inputData.Data);
@@ -156,7 +150,7 @@ public abstract unsafe partial class ClickBase<TImpl, TStruct> : ClickBase<TImpl
 
     private ReceiveEventDelegate GetReceiveEvent(AtkEventListener* listener)
     {
-        var receiveEventAddress = new IntPtr(listener->VirtualTable->ReceiveGlobalEvent);
+        var receiveEventAddress = new IntPtr(listener->VirtualTable->ReceiveEvent);
         return Marshal.GetDelegateForFunctionPointer<ReceiveEventDelegate>(receiveEventAddress)!;
     }
 
