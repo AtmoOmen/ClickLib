@@ -29,7 +29,6 @@ public sealed unsafe class ClickSelectOk : ClickBase<ClickSelectOk, AddonSelectO
     /// <returns>A click instance.</returns>
     public static ClickSelectOk Using(IntPtr addon) => new(addon);
 
-
     /// <summary>
     /// Click the ok button.
     /// </summary>

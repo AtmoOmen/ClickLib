@@ -41,5 +41,5 @@ public sealed unsafe class ClickSalvageDialog : ClickBase<ClickSalvageDialog, Ad
     /// </summary>
     [ClickName("desynthesize_checkbox")]
     public void CheckBox()
-        => this.ClickAddonCheckBox(this.Addon->CheckBox, 3);
+        => this.ClickAddonCheckBox(this.Addon->BulkDesynthCheckboxNode, 3);
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using ClickLib.Exceptions;
 using ClickLib.Structures;
 using FFXIVClientStructs.FFXIV.Component.GUI;

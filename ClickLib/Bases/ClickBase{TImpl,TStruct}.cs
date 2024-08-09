@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+
 using ClickLib.Enums;
 using ClickLib.Structures;
 using FFXIVClientStructs.FFXIV.Client.UI;
