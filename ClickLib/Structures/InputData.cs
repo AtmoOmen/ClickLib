@@ -7,7 +7,7 @@ namespace ClickLib.Structures;
 /// <summary>
 /// Input data.
 /// </summary>
-public unsafe sealed class InputData : SharedBuffer
+public sealed unsafe class InputData : SharedBuffer
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="InputData"/> class.

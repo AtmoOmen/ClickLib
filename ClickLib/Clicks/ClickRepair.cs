@@ -27,7 +27,7 @@ public sealed unsafe class ClickRepair : ClickBase<ClickRepair, AddonRepair>
     /// </summary>
     /// <param name="addon">Addon to reference.</param>
     /// <returns>A click instance.</returns>
-    public static ClickRequest Using(IntPtr addon) => new(addon);
+    public static ClickRepair Using(IntPtr addon) => new(addon);
 
     /// <summary>
     /// Click the repair all button.

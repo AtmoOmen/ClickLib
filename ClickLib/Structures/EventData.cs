@@ -5,7 +5,7 @@ namespace ClickLib.Structures;
 /// <summary>
 /// Event data.
 /// </summary>
-public unsafe sealed class EventData : SharedBuffer
+public sealed unsafe class EventData : SharedBuffer
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="EventData"/> class.

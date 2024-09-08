@@ -15,7 +15,7 @@ namespace ClickLib;
 /// </summary>
 public static class Click
 {
-    private static readonly Dictionary<string, PrecompiledDelegate> AvailableClicks = new();
+    private static readonly Dictionary<string, PrecompiledDelegate> AvailableClicks = [];
     private static bool initialized = false;
 
     private delegate void PrecompiledDelegate(IntPtr addon);
@@ -38,11 +38,10 @@ public static class Click
             .Select(method => (method, method.GetCustomAttribute<ClickNameAttribute>()?.Name))
             .Where(tpl => tpl.Name != null);
 
-        foreach (var click in clicks)
+        foreach (var (method, name) in clicks)
         {
-            var method = click.method;
             var clickType = method.DeclaringType!;
-            var ctor = clickType.GetConstructor(new[] { typeof(IntPtr) })!;
+            var ctor = clickType.GetConstructor([typeof(IntPtr)])!;
 
             var param = Expression.Parameter(typeof(IntPtr), "addon");
             var instantiate = Expression.New(ctor, param);
@@ -51,7 +50,7 @@ public static class Click
             var lambdaExpr = Expression.Lambda<PrecompiledDelegate>(blockExpr, param);
             var compiled = lambdaExpr.Compile()!;
 
-            AvailableClicks.Add(click.Name!, compiled);
+            AvailableClicks.Add(name!, compiled);
         }
     }
 
