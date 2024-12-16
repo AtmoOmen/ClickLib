@@ -15,8 +15,8 @@ namespace ClickLib;
 /// </summary>
 public static class Click
 {
-    private static readonly Dictionary<string, PrecompiledDelegate> AvailableClicks = [];
-    private static bool initialized = false;
+    private static readonly Dictionary<string, PrecompiledDelegate> AvailableClicks = new();
+    private static bool initialized;
 
     private delegate void PrecompiledDelegate(IntPtr addon);
 
@@ -48,7 +48,7 @@ public static class Click
             var invoke = Expression.Call(instantiate, method);
             var blockExpr = Expression.Block(invoke);
             var lambdaExpr = Expression.Lambda<PrecompiledDelegate>(blockExpr, param);
-            var compiled = lambdaExpr.Compile()!;
+            var compiled = lambdaExpr.Compile();
 
             AvailableClicks.Add(name!, compiled);
         }
@@ -73,7 +73,7 @@ public static class Click
         if (!AvailableClicks.TryGetValue(name, out var clickDelegate))
             throw new ClickNotFoundError($"Click \"{name}\" does not exist");
 
-        clickDelegate!(addon);
+        clickDelegate(addon);
     }
 
     /// <summary>
