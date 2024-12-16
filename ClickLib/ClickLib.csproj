@@ -4,11 +4,13 @@
     <Authors>daemitus</Authors>
     <Company>-</Company>
     <Version>1.2.0.1</Version>
+    <Description></Description>
+    <Copyright></Copyright>
     <PackageProjectUrl>https://github.com/daemitus/ClickLib</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Platforms>x64</Platforms>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -20,6 +22,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Documentation">
+    <DocumentationFile></DocumentationFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
